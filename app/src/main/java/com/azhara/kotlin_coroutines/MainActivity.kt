@@ -3,10 +3,7 @@ package com.azhara.kotlin_coroutines
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -25,7 +22,7 @@ class MainActivity : AppCompatActivity() {
                     secara otomatis
              */
             CoroutineScope(Dispatchers.IO).launch {
-
+                fakeApiRequest()
             }
         }
     }
@@ -39,6 +36,14 @@ class MainActivity : AppCompatActivity() {
         logThread("getRequesApi1")
         delay(1000)
         return RESULT1
+    }
+
+    private suspend fun setText(result: String){
+        /*Mengganti thread yang sebelumnya berjalan di scope IO dan dialihkan ke scope Main
+        untuk memasukkan data ke dalam tampilan UI*/
+        withContext(Dispatchers.Main){
+
+        }
     }
 
     private fun logThread(methodName: String){
