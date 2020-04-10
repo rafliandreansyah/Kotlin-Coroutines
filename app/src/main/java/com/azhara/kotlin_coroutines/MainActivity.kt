@@ -10,4 +10,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
     }
 
+    private fun logThread(methodName: String){
+        println("debug: $methodName : ${Thread.currentThread().name}")
+    }
+
 }
