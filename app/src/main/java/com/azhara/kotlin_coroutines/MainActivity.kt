@@ -8,6 +8,7 @@ import kotlinx.coroutines.*
 class MainActivity : AppCompatActivity() {
 
     private val RESULT1 = "RESULT#1"
+    private val RESULT2 = "RESULT#2"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,12 +32,22 @@ class MainActivity : AppCompatActivity() {
         val result1 = getRequesApi1()
         println("debug: $result1")
         setTextOnMainThread(result1)
+
+        // Proses ini akan dijalankan ketika pemanggilan proses getRequesApi2 selesai dijalankan
+        val result2 = getRequestApi2()
+        setTextOnMainThread(result2)
     }
 
     private suspend fun getRequesApi1(): String{
         logThread("getRequesApi1")
         delay(1000)
         return RESULT1
+    }
+
+    private suspend fun getRequestApi2(): String{
+        logThread("getRequestApi2")
+        delay(1000)
+        return RESULT2
     }
 
     private fun setText(input: String){
