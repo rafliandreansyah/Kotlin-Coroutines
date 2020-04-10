@@ -10,6 +10,8 @@ class MainActivity : AppCompatActivity() {
     private val RESULT1 = "RESULT#1"
     private val RESULT2 = "RESULT#2"
 
+    private val TIMEOUT = 1900L
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -29,13 +31,27 @@ class MainActivity : AppCompatActivity() {
     }
 
     private suspend fun fakeApiRequest(){
-        val result1 = getRequesApi1()
-        println("debug: $result1")
-        setTextOnMainThread(result1)
 
-        // Proses ini akan dijalankan ketika pemanggilan proses getRequesApi2 selesai dijalankan
-        val result2 = getRequestApi2()
-        setTextOnMainThread(result2)
+            // withTimeOutOrNull atau withTimeOut melakukan pembatasan waktu pada suatu proses coroutines
+            // withTimeOutOrNull akan mengembalikan null jika waktu timeout terpenuhi
+            val job = withTimeoutOrNull(TIMEOUT){
+                val result1 = getRequesApi1()
+                println("debug: $result1")
+                setTextOnMainThread(result1)
+
+                // Proses ini akan dijalankan ketika pemanggilan proses getRequesApi2 selesai dijalankan
+                val result2 = getRequestApi2()
+                println("debug: $result2")
+                setTextOnMainThread(result2)
+            }
+
+            if (job == null){
+                val alertTimeOut = "Cancelling job... Job took longer than $TIMEOUT ms"
+                println("debug: $alertTimeOut")
+                setTextOnMainThread(alertTimeOut)
+            }
+
+
     }
 
     private suspend fun getRequesApi1(): String{
