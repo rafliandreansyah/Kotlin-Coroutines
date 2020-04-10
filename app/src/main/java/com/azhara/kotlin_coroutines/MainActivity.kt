@@ -30,6 +30,7 @@ class MainActivity : AppCompatActivity() {
     private suspend fun fakeApiRequest(){
         val result1 = getRequesApi1()
         println("debug: $result1")
+        setTextOnMainThread(result1)
     }
 
     private suspend fun getRequesApi1(): String{
@@ -38,16 +39,22 @@ class MainActivity : AppCompatActivity() {
         return RESULT1
     }
 
-    private suspend fun setText(result: String){
+    private fun setText(input: String){
+        val inputText = textview.text.toString() + "\n$input"
+        textview.text = inputText
+    }
+
+    private suspend fun setTextOnMainThread(result: String){
         /*Mengganti thread yang sebelumnya berjalan di scope IO dan dialihkan ke scope Main
         untuk memasukkan data ke dalam tampilan UI*/
         withContext(Dispatchers.Main){
-
+            logThread("setTextOnMainThread")
+            setText(result)
         }
     }
 
     private fun logThread(methodName: String){
-        println("debug: $methodName : ${Thread.currentThread().name}")
+        println("debug: $methodName : Thread: ${Thread.currentThread().name}")
     }
 
 }
